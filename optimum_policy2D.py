@@ -20,8 +20,8 @@ forward = [[-1,  0], # go up
 forward_name = ['up', 'left', 'down', 'right']
 
 # action has 3 values: right turn, no turn, left turn
-action = [-1, 0, 1]
-action_name = ['R', '#', 'L']
+actions = [-1, 0, 1]
+action_names = ['R', '#', 'L']
 
 # EXAMPLE INPUTS:
 # grid format:
@@ -66,16 +66,16 @@ def optimum_policy2D(grid,init,goal,cost):
            [[999 for row in range(len(grid[0]))] for col in range(len(grid))]]
 
   #explicitly set this to 0 for grid cell corresponding to goal in any orientation
-  for i in range(len(value)):
-    value[i][goal[0]][goal[1]] = 0
+  for val in value:
+    val[goal[0]][goal[1]] = 0
 
   closed = [[[0 for row in range(len(grid[0]))] for col in range(len(grid))],
            [[0 for row in range(len(grid[0]))] for col in range(len(grid))],
            [[0 for row in range(len(grid[0]))] for col in range(len(grid))],
            [[0 for row in range(len(grid[0]))] for col in range(len(grid))]]
 
-  for i in range(len(closed)):
-    closed[i][goal[0]][goal[1]] = 1 
+  for clo in closed:
+    clo[goal[0]][goal[1]] = 1 
 
   best_move = [[[0 for row in range(len(grid[0]))] for col in range(len(grid))],
               [[0 for row in range(len(grid[0]))] for col in range(len(grid))],
@@ -110,10 +110,10 @@ def optimum_policy2D(grid,init,goal,cost):
       y = next_cell[2]
       orient = next_cell[3]
         
-      for a in range(len(action)):
+      for a in range(len(actions)):
         x2 = x - forward[orient][0]
         y2 = y - forward[orient][1]
-        orient2 = (orient - action[a]) % len(forward)
+        orient2 = (orient - actions[a]) % len(forward)
         total_cost2 = total_cost + cost[a]
 
         if x2 >= 0 and x2 < len(grid) and y2 >=0 and y2 < len(grid[0]):
@@ -132,9 +132,9 @@ def optimum_policy2D(grid,init,goal,cost):
       policy[x][y] = '*'
       return policy
     else:
-      policy[x][y] = action_name[best_move[z][x][y]]
+      policy[x][y] = action_names[best_move[z][x][y]]
       
-      z = (z + action[best_move[z][x][y]]) % len(forward)
+      z = (z + actions[best_move[z][x][y]]) % len(forward)
       x += forward[z][0]
       y += forward[z][1]
     
@@ -143,11 +143,13 @@ def optimum_policy2D(grid,init,goal,cost):
 
 
 def print_array_2D(array):
+    print "\n"
     for element in array:
         print element
     print "\n"
 
 def print_array_3D(arrays):
+    print "\n"
     for array in arrays:
       for element in array:
         print element
