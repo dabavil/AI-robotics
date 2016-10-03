@@ -151,13 +151,13 @@ def run(param1, param2, param3):
   
     for i in range(N):
 
-    	steering_angle = (-1 * param1 * myrobot.y) - (param2 * (myrobot.y - cte) + (param3 * sum_cte))
+    	steering_angle = - param1 * myrobot.y - param2 * (myrobot.y - cte) - param3 * sum_cte
     	cte = myrobot.y
     	sum_cte += cte
     	#print steering_angle
     	
     	myrobot = myrobot.move(steering_angle,speed)
-    	print myrobot.__repr__(), steering_angle
+    	print myrobot, steering_angle
     	
 
 run(0.2, 3.0, 0.004) # call function with parameter tau of 0.1 and print results
