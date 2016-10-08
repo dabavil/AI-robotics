@@ -50,6 +50,8 @@ path=[[0, 0],
       [0, 2],
       [0, 1]]
 
+fix = [1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0]
+
 ############# ONLY ENTER CODE BELOW THIS LINE ##########
 
 # ------------------------------------------------
@@ -58,7 +60,7 @@ path=[[0, 0],
 # larger to decrease run time.
 #
 
-def smooth(path, weight_data = 0.1, weight_smooth = 0.1, tolerance = 0.00001):
+def smooth(path, fxi, weight_data = 0.1, weight_smooth = 0.1, tolerance = 0.00001):
 
     newpath = deepcopy(path)
 
@@ -66,22 +68,23 @@ def smooth(path, weight_data = 0.1, weight_smooth = 0.1, tolerance = 0.00001):
 
     while change > tolerance:
       change = 0
-
+      
       for i in range(len(path)):
         for j in range(len(path[0])):
+          if not fix[i]:
 
-          orig = newpath[i][j]
+            orig = newpath[i][j]
 
-          newpath[i][j] += weight_data * (path[i][j] - newpath[i][j]) + weight_smooth * (newpath[(i-1) % len(path)][j] + newpath[(i+1) % len(path)][j] - 2.0 * newpath[i][j])
+            newpath[i][j] += weight_data * (path[i][j] - newpath[i][j]) + weight_smooth * (newpath[(i-1) % len(path)][j] + newpath[(i+1) % len(path)][j] - 2.0 * newpath[i][j])
 
-          change = abs(newpath[i][j] - orig)
+            change = abs(newpath[i][j] - orig)
     
 
     return newpath
 
 # thank you - EnTerr - for posting this on our discussion forum
 
-newpath = smooth(path)
+newpath = smooth(path, fix)
 for i in range(len(path)):
     print '['+ ', '.join('%.3f'%x for x in path[i]) +'] -> ['+ ', '.join('%.3f'%x for x in newpath[i]) +']'
 
